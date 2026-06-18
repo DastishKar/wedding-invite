@@ -86,9 +86,12 @@ body {
   position: relative;
   width: 100%;
   line-height: 0;
+  overflow: hidden;
 }
 
 .invite-slide__img {
+  position: relative;
+  z-index: 0;
   width: 100%;
   height: auto;
   display: block;
@@ -154,14 +157,18 @@ body {
 
 /* Слайды без фото — только фон */
 .invite-slide--plain {
+  position: relative;
+  overflow: hidden;
   line-height: normal;
-  background: #fcf9f5;
+  background: #fdfbf7;
   padding: 52px 24px;
   min-height: 280px;
+  border: 1px solid rgba(191, 163, 138, 0.2);
 }
 
 .invite-slide--plain .invite-slide__text {
   position: relative;
+  z-index: 3;
   top: auto;
   bottom: auto;
   display: block;
@@ -487,15 +494,21 @@ a:hover {
 .card-ornaments {
   position: absolute;
   inset: 0;
-  z-index: 20;
+  z-index: 1;
   pointer-events: none;
   overflow: hidden;
 }
 
+/* На фото узор чуть заметнее */
+.invite-slide:not(.invite-slide--plain) .rotating-ornament {
+  opacity: 0.32;
+}
+
 .rotating-ornament {
   position: absolute;
-  width: 190px;
-  height: 190px;
+  width: 160px;
+  height: 160px;
+  opacity: 0.25;
   will-change: transform;
   transform-origin: center center;
   animation: spinOrbit 25s linear infinite;
@@ -506,17 +519,16 @@ a:hover {
   height: 100%;
   display: block;
   color: var(--color-ornament);
-  opacity: 0.42;
 }
 
 .ornament-top-right {
-  top: -75px;
-  right: -75px;
+  top: -40px;
+  right: -40px;
 }
 
 .ornament-bottom-left {
-  bottom: -75px;
-  left: -75px;
+  bottom: -40px;
+  left: -40px;
   animation-direction: reverse;
 }
 
