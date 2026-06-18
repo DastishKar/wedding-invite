@@ -1,0 +1,1204 @@
+/* ============================================================
+   Қыз Ұзату — Wedding Invitation Styles
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500&family=Montserrat:ital,wght@0,200;0,300;0,400;1,300&display=swap');
+
+/* --- CSS Variables (нежная пастельная палитра) --- */
+:root {
+  --color-milk: #fcf9f5;
+  --color-cream: #faf7f3;
+  --color-beige: #f0ebe4;
+  --color-paper: #ffffff;
+  --color-white: #ffffff;
+  --color-gold-light: #e8ddd0;
+  --color-gold: #d4c4b0;
+  --color-gold-dark: #bfa38a;
+  --color-brown: #8e7f71;
+  --color-brown-light: #a39588;
+  --color-brown-dark: #7d6652;
+  --color-chocolate: #7d6652;
+  --color-ornament: #c9b8a8;
+  --color-border: rgba(230, 220, 210, 0.6);
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Montserrat', sans-serif;
+
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --fade-duration: 1.5s;
+
+  --transition-slow: 1.5s var(--ease-smooth);
+  --transition-medium: 1.2s var(--ease-smooth);
+  --transition-fast: 0.6s ease-out;
+
+  --max-width: 480px;
+  --max-width-wide: 600px;
+}
+
+/* --- Reset & Base --- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: var(--color-brown);
+  background-color: var(--color-milk);
+  line-height: 1.8;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Page background --- */
+.page-bg {
+  background: #fcf9f5;
+  min-height: 100vh;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* --- Page Wrapper --- */
+.page-wrapper {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* --- Слайды: фото с белым фоном + текст поверх --- */
+.invite-slide {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+
+.invite-slide__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  vertical-align: top;
+}
+
+.invite-slide__text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: transparent !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
+.invite-slide__text-inner {
+  pointer-events: auto;
+  padding: 0 28px;
+  text-align: center;
+}
+
+/* Белая зона по центру (hero, той иелері, дата) */
+.invite-slide--center .invite-slide__text {
+  top: 28%;
+  bottom: 22%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Белая зона внизу (құрметті, приглашение, адрес) */
+.invite-slide--lower .invite-slide__text {
+  top: 42%;
+  bottom: 6%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invite-slide--center .invite-slide__text-inner,
+.invite-slide--lower .invite-slide__text-inner {
+  width: 100%;
+}
+
+/* Слайд 2 — текст выше */
+.greeting-slide .invite-slide__text {
+  top: -16%;
+  bottom: 20%;
+}
+
+/* Слайд 4 — текст ниже */
+.hosts-slide .invite-slide__text {
+  top: 52%;
+  bottom: 4%;
+}
+
+/* Слайд 6 — по середине */
+.location-slide .invite-slide__text {
+  top: 30%;
+  bottom: 24%;
+}
+
+/* Слайды без фото — только фон */
+.invite-slide--plain {
+  line-height: normal;
+  background: #fcf9f5;
+  padding: 52px 24px;
+  min-height: 280px;
+}
+
+.invite-slide--plain .invite-slide__text {
+  position: relative;
+  top: auto;
+  bottom: auto;
+  display: block;
+}
+
+.invite-slide--plain .invite-slide__text-inner {
+  padding: 0 20px;
+}
+
+.plain-slide {
+  border-top: 1px solid rgba(230, 220, 210, 0.5);
+}
+
+.rsvp-slide .invite-slide__text-inner {
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.rsvp-slide .rsvp-form {
+  background: transparent;
+}
+
+.rsvp-slide .form-group input,
+.rsvp-slide .form-group select,
+.rsvp-slide .form-group textarea {
+  background: #ffffff;
+}
+
+/* --- Карточка (рваные горизонтальные края) --- */
+.wedding-card-shell {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  overflow: visible;
+  isolation: isolate;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  clip-path: none;
+}
+
+.wedding-card,
+.kazakh-wedding-card {
+  position: relative;
+  z-index: 1;
+  background: #fdfbf7;
+  padding: 44px 28px 48px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(91, 70, 50, 0.06);
+}
+
+.wedding-card__body {
+  position: relative;
+  z-index: 2;
+}
+
+.section {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.section-card {
+  position: relative;
+}
+
+.invite-block--overlay .wedding-card {
+  max-width: 92%;
+  margin: 0 auto;
+}
+
+.card-section {
+  display: block;
+  padding: 0;
+}
+
+/* --- Typography (нежный казахский стиль) --- */
+
+/* Имена и заголовки — Cormorant Garamond Italic */
+.wedding-bride-name,
+.calligraphy-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  color: #7d6652;
+  font-size: clamp(2.4rem, 11vw, 3.2rem);
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  text-align: center;
+  margin-bottom: 0.35em;
+}
+
+/* Основной текст — Montserrat, тонкий */
+.wedding-kaz-text,
+.calligraphy-text {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: clamp(0.88rem, 3.2vw, 0.95rem);
+  color: #8e7f71;
+  text-align: center;
+  line-height: 2;
+  letter-spacing: 0.06em;
+}
+
+/* Даты, метки — Montserrat uppercase с воздухом */
+.wedding-kaz-text--caps,
+.details-text {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: clamp(0.82rem, 3vw, 0.95rem);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #8e7f71;
+  line-height: 2;
+  text-align: center;
+}
+
+/* Число даты — акцент */
+.wedding-date-number,
+.date-number {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2.8rem, 12vw, 3.5rem);
+  color: #7d6652;
+  line-height: 1;
+  display: inline-block;
+}
+
+.script-text {
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: #8e7f71;
+  line-height: 2;
+}
+
+/* --- Fade-in анимация (загрузка и прокрутка) --- */
+.fade-in-text {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity var(--fade-duration) ease-out,
+    transform var(--fade-duration) ease-out;
+  will-change: opacity, transform;
+}
+
+.fade-in-text--left {
+  transform: translateX(-24px);
+}
+
+.fade-in-text--right {
+  transform: translateX(24px);
+}
+
+.fade-in-text.visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Последовательное появление строк внутри блока */
+.fade-in-stagger {
+  opacity: 1;
+  transform: none;
+}
+
+.fade-in-stagger > *:not(.ornament),
+.fade-in-stagger .footer-inner > *,
+.fade-in-stagger > .rsvp-title,
+.fade-in-stagger > .rsvp-subtitle,
+.fade-in-stagger > .rsvp-form,
+.fade-in-stagger > .rsvp-success,
+.fade-in-stagger .contact-item {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 1.4s ease-out,
+    transform 1.4s ease-out;
+}
+
+.fade-in-stagger.visible > *:not(.ornament),
+.fade-in-stagger.visible .footer-inner > *,
+.fade-in-stagger.visible > .rsvp-title,
+.fade-in-stagger.visible > .rsvp-subtitle,
+.fade-in-stagger.visible > .rsvp-form,
+.fade-in-stagger.visible > .rsvp-success,
+.fade-in-stagger.visible .contact-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-stagger.visible > *:not(.ornament):nth-child(3),
+.fade-in-stagger.visible .footer-inner > *:nth-child(1) { transition-delay: 0.15s; }
+
+.fade-in-stagger.visible > *:not(.ornament):nth-child(4),
+.fade-in-stagger.visible .footer-inner > *:nth-child(2) { transition-delay: 0.3s; }
+
+.fade-in-stagger.visible > *:not(.ornament):nth-child(5),
+.fade-in-stagger.visible .footer-inner > *:nth-child(3) { transition-delay: 0.45s; }
+
+.fade-in-stagger.visible > *:not(.ornament):nth-child(6),
+.fade-in-stagger.visible .footer-inner > *:nth-child(4) { transition-delay: 0.6s; }
+
+.fade-in-stagger.visible > *:not(.ornament):nth-child(7) { transition-delay: 0.75s; }
+.fade-in-stagger.visible > *:not(.ornament):nth-child(8) { transition-delay: 0.9s; }
+
+.fade-in-stagger.visible .date-block { transition-delay: 0.25s; }
+.fade-in-stagger.visible .btn-map { transition-delay: 0.4s; }
+.fade-in-stagger.visible .rsvp-form { transition-delay: 0.3s; }
+.fade-in-stagger.visible .contact-item { transition-delay: 0.2s; }
+.fade-in-stagger.visible .ornament-divider { transition-delay: 0.15s; }
+
+.accent-text {
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: #8e7f71;
+  line-height: 2;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--color-brown);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-gold-dark);
+}
+
+.invite-text,
+.serif-text {
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: #8e7f71;
+  line-height: 2;
+}
+
+.invite-title,
+.serif-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  color: #7d6652;
+  letter-spacing: 0.06em;
+}
+
+/* --- Paper Texture (едва заметная) --- */
+.paper-texture {
+  background-color: #ffffff;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(201, 184, 150, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(201, 184, 150, 0.03) 0%, transparent 50%);
+}
+
+/* --- Torn Paper Effect (горизонтальные рваные края) --- */
+.torn-top,
+.torn-bottom,
+.torn-paper {
+  position: relative;
+}
+
+.torn-top {
+  padding-top: 32px;
+  margin-top: 0;
+  z-index: 2;
+}
+
+.torn-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 28' preserveAspectRatio='none'%3E%3Cpath d='M0,28 L0,10 Q4,2 9,8 Q14,14 19,5 Q24,0 29,9 Q34,18 39,6 Q44,0 49,10 Q54,20 59,7 Q64,0 69,11 Q74,22 79,8 Q84,0 89,9 Q94,18 99,6 Q104,0 109,10 Q114,20 119,7 Q124,0 129,11 Q134,22 139,8 Q144,0 149,9 Q154,18 159,6 Q164,0 169,10 Q174,20 179,7 Q184,0 189,11 Q194,22 199,8 Q204,0 209,9 Q214,18 219,6 Q224,0 229,10 Q234,20 239,7 Q244,0 249,11 Q254,22 259,8 Q264,0 269,9 Q274,18 279,6 Q284,0 289,10 Q294,20 299,7 Q304,0 309,11 Q314,22 319,8 Q324,0 329,9 Q334,18 339,6 Q344,0 349,10 Q354,20 359,7 Q364,0 369,11 Q374,22 379,8 Q384,0 389,9 Q394,18 400,6 L400,28 Z' fill='%23fdfbf7'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.torn-bottom {
+  padding-bottom: 32px;
+  margin-bottom: 0;
+  z-index: 2;
+}
+
+.torn-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 28' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L0,18 Q4,26 9,20 Q14,14 19,23 Q24,28 29,19 Q34,10 39,22 Q44,28 49,18 Q54,8 59,21 Q64,28 69,17 Q74,6 79,20 Q84,28 89,19 Q94,10 99,22 Q104,28 109,18 Q114,8 119,21 Q124,28 129,17 Q134,6 139,20 Q144,28 149,19 Q154,10 159,22 Q164,28 169,18 Q174,8 179,21 Q184,28 189,17 Q194,6 199,20 Q204,28 209,19 Q214,10 219,22 Q224,28 229,18 Q234,8 239,21 Q244,28 249,17 Q254,6 259,20 Q264,28 269,19 Q274,10 279,22 Q284,28 289,18 Q294,8 299,21 Q304,28 309,17 Q314,6 319,20 Q324,28 329,19 Q334,10 339,22 Q344,28 349,18 Q354,8 359,21 Q364,28 369,17 Q374,6 379,20 Q384,28 389,19 Q394,10 400,22 L400,0 Z' fill='%23fdfbf7'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.torn-paper.torn-top.torn-bottom .wedding-card {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.torn-top .wedding-card {
+  border-top: none;
+}
+
+.torn-bottom .wedding-card {
+  border-bottom: none;
+}
+
+/* --- Вращающийся орнамент (SVG) --- */
+.card-ornaments {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.rotating-ornament {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  will-change: transform;
+  transform-origin: center center;
+  animation: spinOrbit 25s linear infinite;
+}
+
+.rotating-ornament svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: var(--color-ornament);
+  opacity: 0.42;
+}
+
+.ornament-top-right {
+  top: -75px;
+  right: -75px;
+}
+
+.ornament-bottom-left {
+  bottom: -75px;
+  left: -75px;
+  animation-direction: reverse;
+}
+
+@keyframes spinOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Плавное появление карточки */
+.fade-in {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInEffect 1.5s ease-out forwards;
+}
+
+@keyframes fadeInEffect {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Countdown --- */
+.countdown {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(191, 163, 138, 0.35);
+}
+
+.countdown-title {
+  font-family: var(--font-body);
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-size: clamp(0.78rem, 2.8vw, 0.88rem);
+  margin-bottom: 16px;
+  color: #8e7f71;
+}
+
+.countdown-past {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.6rem, 5vw, 2rem);
+  color: #7d6652;
+}
+
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.countdown-number {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.4rem, 5vw, 1.75rem);
+  font-weight: 300;
+  color: #7d6652;
+  line-height: 1;
+}
+
+.countdown-label {
+  font-family: var(--font-body);
+  font-size: clamp(0.55rem, 2vw, 0.65rem);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #8e7f71;
+  opacity: 0.8;
+}
+
+/* --- Ornament Divider --- */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px auto;
+  max-width: 200px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+}
+
+.divider-diamond {
+  color: var(--color-gold);
+  font-size: 0.5rem;
+  opacity: 0.7;
+}
+
+/* --- Split & card секции --- */
+.section-card {
+  text-align: center;
+  position: relative;
+}
+
+/* --- Background music toggle --- */
+.music-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--color-gold);
+  background: rgba(255, 252, 248, 0.92);
+  color: var(--color-brown);
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(92, 70, 54, 0.12);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  backdrop-filter: blur(6px);
+}
+
+.music-toggle:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 24px rgba(92, 70, 54, 0.18);
+}
+
+.music-toggle--playing .music-toggle__icon {
+  animation: musicPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* --- Zoom фона --- */
+.zoom-bg {
+  animation: kenBurns 12s ease-out forwards;
+}
+
+@keyframes kenBurns {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+.hero-section {
+  position: relative;
+}
+
+.hero-middle {
+  text-align: center;
+  position: relative;
+}
+
+.hero-bride-name {
+  margin-bottom: 25px;
+}
+
+.hero-date {
+  margin-bottom: 10px;
+}
+
+.hero-event-title {
+  text-transform: lowercase;
+  letter-spacing: 0.28em;
+}
+
+/* ============================================================
+   GREETING SECTION
+   ============================================================ */
+.greeting-section {
+  position: relative;
+}
+
+.greeting-paper {
+  text-align: center;
+  padding: 56px 36px 48px;
+  position: relative;
+}
+
+.greeting-title {
+  margin-bottom: 20px;
+}
+
+.greeting-body {
+  line-height: 2;
+}
+
+.welcome-intro {
+  margin-bottom: 6px;
+}
+
+.welcome-name {
+  margin-bottom: 18px;
+}
+
+.welcome-body {
+  line-height: 2;
+}
+
+.hosts-label {
+  margin-bottom: 10px;
+}
+
+.hosts-names {
+  margin-bottom: 16px;
+}
+
+.hosts-invite {
+  line-height: 1.55;
+}
+
+.datetime-label {
+  margin-bottom: 14px;
+}
+
+.location-label {
+  margin-bottom: 14px;
+}
+
+.location-address {
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+.location-street {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.95em;
+  opacity: 0.9;
+}
+
+.btn-map {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 14px 36px;
+  border: 1px solid var(--color-gold);
+  color: var(--color-brown);
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-cream) 100%);
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-map:hover {
+  background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-cream) 100%);
+  box-shadow: 0 4px 20px rgba(201, 184, 150, 0.3);
+  transform: translateY(-2px);
+  color: var(--color-brown-dark);
+}
+
+.section-visual,
+.greeting-image-wrap {
+  height: 42vh;
+  min-height: 240px;
+  max-height: 380px;
+  overflow: hidden;
+}
+
+/* ============================================================
+   WELCOME SECTION
+   ============================================================ */
+.welcome-section {
+  position: relative;
+}
+
+.welcome-image-wrap,
+.section-visual {
+  height: 40vh;
+  min-height: 220px;
+  max-height: 360px;
+  overflow: hidden;
+}
+
+.welcome-paper {
+  text-align: center;
+  padding: 48px 32px 56px;
+  position: relative;
+}
+
+/* ============================================================
+   HOSTS & DATETIME SECTIONS
+   ============================================================ */
+.hosts-section,
+.datetime-section {
+  padding: 0;
+}
+
+.datetime-label {
+  margin-bottom: 16px;
+}
+
+.datetime-month {
+  letter-spacing: 0.4em;
+  margin-bottom: 20px;
+}
+
+.date-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.date-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-side-text {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: clamp(0.6rem, 2.2vw, 0.72rem);
+  letter-spacing: 0.25em;
+  color: #8e7f71;
+  text-transform: uppercase;
+}
+
+.date-line {
+  display: block;
+  width: 50px;
+  height: 1px;
+  background-color: #c9b8a8;
+  opacity: 0.5;
+}
+
+.datetime-time-label {
+  margin-bottom: 8px;
+}
+
+.datetime-time {
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   LOCATION SECTION
+   ============================================================ */
+.location-section {
+  position: relative;
+}
+
+.location-image-wrap {
+  height: 40vh;
+  min-height: 220px;
+  max-height: 360px;
+  overflow: hidden;
+}
+
+.location-paper {
+  text-align: center;
+  padding: 48px 32px 56px;
+}
+
+/* ============================================================
+   RSVP SECTION
+   ============================================================ */
+.rsvp-section {
+  padding: 0;
+  background: transparent;
+}
+
+.rsvp-inner {
+  position: relative;
+  text-align: center;
+}
+
+.rsvp-title {
+  margin-bottom: 8px;
+}
+
+.rsvp-subtitle {
+  margin-bottom: 32px;
+  opacity: 0.85;
+}
+
+.rsvp-form {
+  text-align: left;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #a39588;
+  margin-bottom: 8px;
+}
+
+.form-group input[type="text"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 0.9rem;
+  color: var(--color-brown);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gold-light);
+  border-radius: 0;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(201, 184, 150, 0.15);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 0.9rem;
+  color: #8e7f71;
+  cursor: pointer;
+}
+
+.radio-label input[type="radio"] {
+  accent-color: var(--color-gold-dark);
+  width: 18px;
+  height: 18px;
+}
+
+.btn-submit {
+  display: block;
+  width: 100%;
+  margin-top: 28px;
+  padding: 14px 24px;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: linear-gradient(135deg, #a39588 0%, #8e7f71 100%);
+  border: none;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.btn-submit:hover {
+  background: linear-gradient(135deg, #8e7f71 0%, #7d6652 100%);
+  box-shadow: 0 8px 24px rgba(191, 163, 138, 0.25);
+  transform: translateY(-2px);
+}
+
+.rsvp-success {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: #7d6652;
+  margin-top: 20px;
+  animation: fadeUpGrow 0.8s ease forwards;
+}
+
+/* ============================================================
+   CONTACTS SECTION
+   ============================================================ */
+.contacts-section {
+  padding: 0;
+}
+
+.contacts-inner {
+  text-align: center;
+  position: relative;
+}
+
+.contacts-title {
+  margin-bottom: 32px;
+}
+
+.contact-item {
+  margin-bottom: 8px;
+}
+
+.contact-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.contact-value {
+  margin-bottom: 2px;
+  text-transform: none;
+  letter-spacing: 0.05em;
+}
+
+.contact-value a {
+  color: var(--color-chocolate);
+}
+
+.contact-name {
+  opacity: 0.7;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: transparent;
+  padding: 0 0 8px;
+  text-align: center;
+}
+
+.footer-inner {
+  padding: 40px 30px;
+}
+
+.footer-names {
+  margin-bottom: 8px;
+}
+
+.footer-date {
+  margin-bottom: 6px;
+}
+
+.footer-event {
+  text-transform: lowercase;
+  letter-spacing: 0.22em;
+  margin-bottom: 16px;
+}
+
+.footer-copy {
+  font-size: 0.9rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET
+   ============================================================ */
+@media (min-width: 481px) {
+  .page-wrapper {
+    max-width: var(--max-width-wide);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+
+  .hero-top,
+  .hero-bottom {
+    max-height: 380px;
+  }
+
+  .greeting-image-wrap {
+    max-height: 460px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — LAPTOP
+   ============================================================ */
+@media (min-width: 768px) {
+  html {
+    font-size: 17px;
+  }
+
+  .page-wrapper {
+    max-width: 520px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 0 80px rgba(74, 55, 40, 0.1);
+  }
+
+  .hero-middle {
+    padding: 56px 48px 60px;
+  }
+
+  .greeting-paper,
+  .welcome-paper,
+  .location-paper {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  .hosts-card,
+  .datetime-card {
+    padding: 52px 40px;
+  }
+
+  .rotating-ornament {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — LARGE MONITOR
+   ============================================================ */
+@media (min-width: 1200px) {
+  body {
+    background: linear-gradient(
+      135deg,
+      var(--color-milk) 0%,
+      var(--color-beige) 50%,
+      var(--color-milk) 100%
+    );
+    min-height: 100vh;
+  }
+
+  .page-wrapper {
+    max-width: 480px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .rotating-ornament {
+    animation: spinOrbit 25s linear infinite !important;
+    animation-duration: 25s !important;
+    animation-iteration-count: infinite !important;
+  }
+
+  .fade-in-text {
+    opacity: 1;
+    transform: none;
+  }
+
+  .zoom-bg {
+    animation: none;
+    transform: scale(1);
+  }
+}
