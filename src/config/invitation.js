@@ -27,10 +27,10 @@ const invitation = {
 
   event: {
     title: "қыз ұзату",
-    dateDisplay: "25.07.2026",
-    dateTime: "2026-07-25T17:00:00+05:00",
-    month: "ШІЛДЕ",
-    day: "25",
+    dateDisplay: "01.08.2026",
+    dateTime: "2026-08-01T17:00:00+05:00",
+    month: "ТАМЫЗ",
+    day: "01",
     dayOfWeek: "СЕНБІ",
     year: "2026",
     time: "17:00",
@@ -64,9 +64,10 @@ const invitation = {
   location: {
     label: "Мекен — жайымыз:",
     city: "Семей қаласы,",
-    venue: "KUN men Ai рестораны",
-    street: "Абая Кунанбаева көшесі, 97/1",
-    mapUrl: "https://2gis.kz/semej/firm/70000001111685878",
+    venue: "Aspan рестораны",
+    street: "Усть-Каменогорская көшесі, 11/2",
+    mapUrl:
+      "https://2gis.kz/semej/search/Aspan/firm/70000001078899104/80.295171%2C50.39921?m=80.295177%2C50.399218%2F18",
     mapButton: "Картада ашу",
   },
 
