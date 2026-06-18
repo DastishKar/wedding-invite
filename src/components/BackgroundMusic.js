@@ -16,61 +16,90 @@ function getMimeType(src) {
 function BackgroundMusic() {
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
+  // Флаг чтобы не вызывать load() повторно
+  const loadedRef = useRef(false);
 
   const sources = invitation.music.sources || [invitation.music.src];
 
-  // Явно перезагружаем источники при маунте — иначе некоторые
-  // мобильные браузеры (особенно старые Android WebView) не видят
-  // <source> детей, добавленные React после первого рендера.
+  // НЕ вызываем audio.load() здесь — пусть браузер сам загрузит
+  // через preload. load() будет вызван только один раз перед первым play()
   useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      audio.load();
-    }
-  }, []);
-
-  const toggleMusic = async () => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    try {
-      if (playing) {
-        audio.pause();
-        setPlaying(false);
-        return;
-      }
+    const handleCanPlay = () => {
+      loadedRef.current = true;
+    };
 
-      audio.volume = 1;
-      audio.muted = false;
+    audio.addEventListener("canplay", handleCanPlay);
+    return () => audio.removeEventListener("canplay", handleCanPlay);
+  }, []);
 
-      await audio.play();
-      setPlaying(true);
-      setUnlocked(true);
-    } catch (e) {
-      console.warn("Audio play error:", e);
+  const toggleMusic = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (playing) {
+      audio.pause();
       setPlaying(false);
+      return;
+    }
 
-      // На iOS отказ play() почти всегда означает, что устройство
-      // в режиме "без звука" (физический переключатель) — это не
-      // ошибка кода, JS не может это обойти через стандартный <audio>.
-      if (!unlocked) {
-        console.warn(
-          "Если звука нет на iPhone — проверьте переключатель звонка/без звука.",
-        );
-      }
+    audio.volume = 1;
+    audio.muted = false;
+
+    // Если аудио ещё не было загружено — загружаем один раз синхронно,
+    // но play() вызываем сразу в том же tick жеста пользователя.
+    // НЕ используем async/await — это критично для iOS Safari,
+    // который требует прямой вызов play() внутри обработчика события.
+    if (!loadedRef.current) {
+      audio.load();
+      loadedRef.current = true;
+    }
+
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setPlaying(true);
+        })
+        .catch((e) => {
+          // AbortError после load() — пробуем ещё раз через небольшую паузу
+          if (e.name === "AbortError") {
+            setTimeout(() => {
+              audio
+                .play()
+                .then(() => setPlaying(true))
+                .catch((e2) => {
+                  console.warn("Audio play error (retry):", e2);
+                  setPlaying(false);
+                });
+            }, 300);
+          } else {
+            console.warn("Audio play error:", e);
+            setPlaying(false);
+          }
+        });
+    } else {
+      // Старые браузеры — play() не возвращает Promise
+      setPlaying(true);
     }
   };
 
   return (
     <>
+      {/* 
+        preload="none" на мобильных — браузер не будет пытаться
+        загрузить файл заранее и не создаст конфликт с play().
+        На десктопе preload="auto" работал бы лучше, но на iOS
+        он всё равно игнорируется.
+      */}
       <audio
         ref={audioRef}
         loop
-        preload="auto"
+        preload="none"
         playsInline
-        muted={false}
-        // webkit-playsinline нужен для старых iOS Safari
         webkit-playsinline="true"
       >
         {sources.map((src) => (
