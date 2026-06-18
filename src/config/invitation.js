@@ -8,9 +8,9 @@ const invitation = {
   },
 
   music: {
-    src: "/music/background.mpeg",
+    src: "/music/background.mp3",
     sources: [
-      "/music/background.mpeg",
+      "/music/background.mp3",
       "/music/background.mpeg",
       "/music/background.mp4",
       "/music/background.wav",
