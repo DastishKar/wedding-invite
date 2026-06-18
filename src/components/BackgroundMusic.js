@@ -19,14 +19,20 @@ function BackgroundMusic() {
     const audio = audioRef.current;
     if (!audio) return false;
     try {
+      // Снимаем muted ДО play()
       audio.muted = false;
       audio.volume = 1;
+      // Если AudioContext suspended — resume (нужно на iOS)
+      if (audio._audioContext && audio._audioContext.state === "suspended") {
+        await audio._audioContext.resume();
+      }
       await audio.play();
       unlockedRef.current = true;
       setPlaying(true);
       setNeedsUnlock(false);
       return true;
-    } catch {
+    } catch (err) {
+      console.warn("playAudio error:", err);
       setPlaying(false);
       setNeedsUnlock(true);
       return false;
@@ -61,29 +67,40 @@ function BackgroundMusic() {
     audio.setAttribute("playsinline", "");
     audio.setAttribute("webkit-playsinline", "true");
 
-    // Попытка автозапуска (работает на ПК и некоторых Android)
+    // Подключаем AudioContext — помогает на iOS разблокировать звук
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        const ctx = new AudioCtx();
+        const source = ctx.createMediaElementSource(audio);
+        source.connect(ctx.destination);
+        audio._audioContext = ctx;
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    // Попытка автозапуска (ПК)
     const tryAutoplay = async () => {
       if (unlockedRef.current) return;
       try {
         audio.muted = false;
+        audio.volume = 1;
         await audio.play();
         unlockedRef.current = true;
         setPlaying(true);
         setNeedsUnlock(false);
       } catch {
-        // Автозапуск заблокирован — показываем кнопку
         setNeedsUnlock(true);
       }
     };
 
     tryAutoplay();
 
-    // ключевое: обработчик должен быть синхронным и вызывать play() напрямую
+    // Синхронный обработчик жеста — критично для iOS Safari
     const onUserGesture = () => {
       if (unlockedRef.current) return;
 
-      // Убираем все обработчики сразу — play() должен быть вызван
-      // в одном синхронном стеке с событием
       UNLOCK_EVENTS.forEach((ev) => {
         document.removeEventListener(ev, onUserGesture, { capture: true });
       });
@@ -91,10 +108,14 @@ function BackgroundMusic() {
       const audio = audioRef.current;
       if (!audio) return;
 
+      // Resume AudioContext синхронно
+      if (audio._audioContext && audio._audioContext.state === "suspended") {
+        audio._audioContext.resume();
+      }
+
       audio.muted = false;
       audio.volume = 1;
 
-      // play() синхронно в обработчике жеста — браузер разрешит
       audio
         .play()
         .then(() => {
@@ -102,7 +123,8 @@ function BackgroundMusic() {
           setPlaying(true);
           setNeedsUnlock(false);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.warn("unlock error:", err);
           setNeedsUnlock(true);
         });
     };
@@ -116,7 +138,6 @@ function BackgroundMusic() {
 
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
-
     audio.addEventListener("play", onPlay);
     audio.addEventListener("pause", onPause);
 
@@ -127,7 +148,7 @@ function BackgroundMusic() {
       audio.removeEventListener("play", onPlay);
       audio.removeEventListener("pause", onPause);
     };
-  }, []); // <-- убрали playAudio из зависимостей, чтобы не пересоздавать обработчик
+  }, []);
 
   const sources = invitation.music.sources || [invitation.music.src];
 
