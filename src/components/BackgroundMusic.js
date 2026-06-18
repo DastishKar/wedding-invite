@@ -1,7 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import invitation from '../config/invitation';
+import { useCallback, useEffect, useRef, useState } from "react";
+import invitation from "../config/invitation";
 
-const UNLOCK_EVENTS = ['touchstart', 'touchend', 'click', 'pointerdown', 'keydown'];
+const UNLOCK_EVENTS = [
+  "touchstart",
+  "touchend",
+  "click",
+  "pointerdown",
+  "keydown",
+];
 
 function BackgroundMusic() {
   const audioRef = useRef(null);
@@ -12,7 +18,6 @@ function BackgroundMusic() {
   const playAudio = useCallback(async () => {
     const audio = audioRef.current;
     if (!audio) return false;
-
     try {
       audio.muted = false;
       audio.volume = 1;
@@ -23,17 +28,13 @@ function BackgroundMusic() {
       return true;
     } catch {
       setPlaying(false);
-      if (!unlockedRef.current) {
-        setNeedsUnlock(true);
-      }
+      setNeedsUnlock(true);
       return false;
     }
   }, []);
 
   const pauseAudio = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.pause();
+    audioRef.current?.pause();
     setPlaying(false);
   }, []);
 
@@ -42,80 +43,91 @@ function BackgroundMusic() {
       e?.stopPropagation?.();
       await playAudio();
     },
-    [playAudio]
+    [playAudio],
   );
 
   const toggle = useCallback(
     async (e) => {
       e.stopPropagation();
-      if (playing) {
-        pauseAudio();
-      } else {
-        await playAudio();
-      }
+      playing ? pauseAudio() : await playAudio();
     },
-    [pauseAudio, playAudio, playing]
+    [pauseAudio, playAudio, playing],
   );
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return undefined;
+    if (!audio) return;
 
-    audio.setAttribute('playsinline', '');
-    audio.setAttribute('webkit-playsinline', 'true');
+    audio.setAttribute("playsinline", "");
+    audio.setAttribute("webkit-playsinline", "true");
 
+    // Попытка автозапуска (работает на ПК и некоторых Android)
     const tryAutoplay = async () => {
       if (unlockedRef.current) return;
-
-      // На мобильных иногда срабатывает тихий автозапуск — затем включаем звук
       try {
-        audio.muted = true;
-        await audio.play();
         audio.muted = false;
+        await audio.play();
         unlockedRef.current = true;
         setPlaying(true);
         setNeedsUnlock(false);
       } catch {
-        audio.muted = false;
+        // Автозапуск заблокирован — показываем кнопку
         setNeedsUnlock(true);
-      }
-    };
-
-    const onUserGesture = () => {
-      if (!unlockedRef.current) {
-        playAudio();
       }
     };
 
     tryAutoplay();
-    audio.addEventListener('canplaythrough', tryAutoplay);
 
-    UNLOCK_EVENTS.forEach((eventName) => {
-      document.addEventListener(eventName, onUserGesture, { capture: true, passive: true });
+    // ключевое: обработчик должен быть синхронным и вызывать play() напрямую
+    const onUserGesture = () => {
+      if (unlockedRef.current) return;
+
+      // Убираем все обработчики сразу — play() должен быть вызван
+      // в одном синхронном стеке с событием
+      UNLOCK_EVENTS.forEach((ev) => {
+        document.removeEventListener(ev, onUserGesture, { capture: true });
+      });
+
+      const audio = audioRef.current;
+      if (!audio) return;
+
+      audio.muted = false;
+      audio.volume = 1;
+
+      // play() синхронно в обработчике жеста — браузер разрешит
+      audio
+        .play()
+        .then(() => {
+          unlockedRef.current = true;
+          setPlaying(true);
+          setNeedsUnlock(false);
+        })
+        .catch(() => {
+          setNeedsUnlock(true);
+        });
+    };
+
+    UNLOCK_EVENTS.forEach((ev) => {
+      document.addEventListener(ev, onUserGesture, {
+        capture: true,
+        passive: true,
+      });
     });
 
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
-    const onError = () => {
-      if (!unlockedRef.current) {
-        setNeedsUnlock(true);
-      }
-    };
 
-    audio.addEventListener('play', onPlay);
-    audio.addEventListener('pause', onPause);
-    audio.addEventListener('error', onError);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
 
     return () => {
-      audio.removeEventListener('canplaythrough', tryAutoplay);
-      UNLOCK_EVENTS.forEach((eventName) => {
-        document.removeEventListener(eventName, onUserGesture, { capture: true });
+      UNLOCK_EVENTS.forEach((ev) => {
+        document.removeEventListener(ev, onUserGesture, { capture: true });
       });
-      audio.removeEventListener('play', onPlay);
-      audio.removeEventListener('pause', onPause);
-      audio.removeEventListener('error', onError);
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
     };
-  }, [playAudio]);
+  }, []); // <-- убрали playAudio из зависимостей, чтобы не пересоздавать обработчик
 
   const sources = invitation.music.sources || [invitation.music.src];
 
@@ -143,12 +155,12 @@ function BackgroundMusic() {
 
       <button
         type="button"
-        className={`music-toggle ${playing ? 'music-toggle--playing' : ''} ${needsUnlock && !playing ? 'music-toggle--pulse' : ''}`}
+        className={`music-toggle ${playing ? "music-toggle--playing" : ""} ${needsUnlock && !playing ? "music-toggle--pulse" : ""}`}
         onClick={toggle}
-        aria-label={playing ? 'Музыканы тоқтату' : 'Музыканы қосу'}
+        aria-label={playing ? "Музыканы тоқтату" : "Музыканы қосу"}
       >
         <span className="music-toggle__icon" aria-hidden="true">
-          {playing ? '♫' : '♪'}
+          {playing ? "♫" : "♪"}
         </span>
       </button>
     </>
