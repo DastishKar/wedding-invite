@@ -27,10 +27,10 @@ const invitation = {
 
   event: {
     title: "қыз ұзату",
-    dateDisplay: "01.08.2026",
-    dateTime: "2026-08-01T17:00:00+05:00",
-    month: "ТАМЫЗ",
-    day: "01",
+    dateDisplay: "25.07.2026",
+    dateTime: "2026-07-25T17:00:00+05:00",
+    month: "ШІЛДЕ",
+    day: "25",
     dayOfWeek: "СЕНБІ",
     year: "2026",
     time: "17:00",
@@ -64,10 +64,9 @@ const invitation = {
   location: {
     label: "Мекен — жайымыз:",
     city: "Семей қаласы,",
-    venue: "Aspan рестораны",
-    street: "Усть-Каменогорская көшесі, 11/2",
-    mapUrl:
-      "https://2gis.kz/semej/search/Aspan/firm/70000001078899104/80.295171%2C50.39921?m=80.295177%2C50.399218%2F18",
+    venue: "KUN men Ai рестораны",
+    street: "Абая Кунанбаева көшесі, 97/1",
+    mapUrl: "https://2gis.kz/semej/firm/70000001111685878",
     mapButton: "Картада ашу",
   },
 
@@ -75,6 +74,7 @@ const invitation = {
     title: "Қатысуыңызды растаңыз",
     subtitle: "Сіздің жауабыңыз біз үшін маңызды",
     successMessage: "Рақмет! Сіздің жауабыңыз қабылданды.",
+    errorMessage: "Жіберу сәтсіз аяқталды. Қайта көріңіз немесе байланыс номеріне хабарласыңыз.",
   },
 
   contacts: {
@@ -82,13 +82,13 @@ const invitation = {
     hosts: [
       {
         name: "Сағынбек",
-        phone: "+77771636299",
-        phoneDisplay: "+7 (777) 163-62-99",
+        phone: "+77001234567",
+        phoneDisplay: "+7 (700) 123-45-67",
       },
       {
         name: "Алия",
-        phone: "+77071540969",
-        phoneDisplay: "+7 (707) 154-09-69",
+        phone: "+77007654321",
+        phoneDisplay: "+7 (700) 765-43-21",
       },
     ],
   },

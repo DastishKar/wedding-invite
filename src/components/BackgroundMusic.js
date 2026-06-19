@@ -1,119 +1,155 @@
-import { useEffect, useRef, useState } from "react";
-import invitation from "../config/invitation";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import invitation from '../config/invitation';
 
-function getMimeType(src) {
-  const ext = src.split(".").pop().toLowerCase();
-  const map = {
-    mp3: "audio/mpeg",
-    ogg: "audio/ogg",
-    wav: "audio/wav",
-    m4a: "audio/mp4",
-    aac: "audio/aac",
-  };
-  return map[ext] || "audio/mpeg";
-}
+const UNLOCK_EVENTS = ['touchstart', 'touchend', 'click', 'pointerdown', 'keydown'];
 
 function BackgroundMusic() {
   const audioRef = useRef(null);
+  const unlockedRef = useRef(false);
   const [playing, setPlaying] = useState(false);
-  // Флаг чтобы не вызывать load() повторно
-  const loadedRef = useRef(false);
+  const [needsUnlock, setNeedsUnlock] = useState(false);
+
+  const playAudio = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio) return false;
+
+    try {
+      audio.muted = false;
+      audio.volume = 1;
+      await audio.play();
+      unlockedRef.current = true;
+      setPlaying(true);
+      setNeedsUnlock(false);
+      return true;
+    } catch {
+      setPlaying(false);
+      if (!unlockedRef.current) {
+        setNeedsUnlock(true);
+      }
+      return false;
+    }
+  }, []);
+
+  const pauseAudio = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.pause();
+    setPlaying(false);
+  }, []);
+
+  const unlock = useCallback(
+    async (e) => {
+      e?.stopPropagation?.();
+      await playAudio();
+    },
+    [playAudio]
+  );
+
+  const toggle = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      if (playing) {
+        pauseAudio();
+      } else {
+        await playAudio();
+      }
+    },
+    [pauseAudio, playAudio, playing]
+  );
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return undefined;
+
+    audio.setAttribute('playsinline', '');
+    audio.setAttribute('webkit-playsinline', 'true');
+
+    const tryAutoplay = async () => {
+      if (unlockedRef.current) return;
+
+      // На мобильных иногда срабатывает тихий автозапуск — затем включаем звук
+      try {
+        audio.muted = true;
+        await audio.play();
+        audio.muted = false;
+        unlockedRef.current = true;
+        setPlaying(true);
+        setNeedsUnlock(false);
+      } catch {
+        audio.muted = false;
+        setNeedsUnlock(true);
+      }
+    };
+
+    const onUserGesture = () => {
+      if (!unlockedRef.current) {
+        playAudio();
+      }
+    };
+
+    tryAutoplay();
+    audio.addEventListener('canplaythrough', tryAutoplay);
+
+    UNLOCK_EVENTS.forEach((eventName) => {
+      document.addEventListener(eventName, onUserGesture, { capture: true, passive: true });
+    });
+
+    const onPlay = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
+    const onError = () => {
+      if (!unlockedRef.current) {
+        setNeedsUnlock(true);
+      }
+    };
+
+    audio.addEventListener('play', onPlay);
+    audio.addEventListener('pause', onPause);
+    audio.addEventListener('error', onError);
+
+    return () => {
+      audio.removeEventListener('canplaythrough', tryAutoplay);
+      UNLOCK_EVENTS.forEach((eventName) => {
+        document.removeEventListener(eventName, onUserGesture, { capture: true });
+      });
+      audio.removeEventListener('play', onPlay);
+      audio.removeEventListener('pause', onPause);
+      audio.removeEventListener('error', onError);
+    };
+  }, [playAudio]);
 
   const sources = invitation.music.sources || [invitation.music.src];
 
-  // НЕ вызываем audio.load() здесь — пусть браузер сам загрузит
-  // через preload. load() будет вызван только один раз перед первым play()
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleCanPlay = () => {
-      loadedRef.current = true;
-    };
-
-    audio.addEventListener("canplay", handleCanPlay);
-    return () => audio.removeEventListener("canplay", handleCanPlay);
-  }, []);
-
-  const toggleMusic = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (playing) {
-      audio.pause();
-      setPlaying(false);
-      return;
-    }
-
-    audio.volume = 1;
-    audio.muted = false;
-
-    // Если аудио ещё не было загружено — загружаем один раз синхронно,
-    // но play() вызываем сразу в том же tick жеста пользователя.
-    // НЕ используем async/await — это критично для iOS Safari,
-    // который требует прямой вызов play() внутри обработчика события.
-    if (!loadedRef.current) {
-      audio.load();
-      loadedRef.current = true;
-    }
-
-    const playPromise = audio.play();
-
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          setPlaying(true);
-        })
-        .catch((e) => {
-          // AbortError после load() — пробуем ещё раз через небольшую паузу
-          if (e.name === "AbortError") {
-            setTimeout(() => {
-              audio
-                .play()
-                .then(() => setPlaying(true))
-                .catch((e2) => {
-                  console.warn("Audio play error (retry):", e2);
-                  setPlaying(false);
-                });
-            }, 300);
-          } else {
-            console.warn("Audio play error:", e);
-            setPlaying(false);
-          }
-        });
-    } else {
-      // Старые браузеры — play() не возвращает Promise
-      setPlaying(true);
-    }
-  };
-
   return (
     <>
-      {/* 
-        preload="none" на мобильных — браузер не будет пытаться
-        загрузить файл заранее и не создаст конфликт с play().
-        На десктопе preload="auto" работал бы лучше, но на iOS
-        он всё равно игнорируется.
-      */}
-      <audio
-        ref={audioRef}
-        loop
-        preload="none"
-        playsInline
-        webkit-playsinline="true"
-      >
+      <audio ref={audioRef} loop preload="auto" playsInline>
         {sources.map((src) => (
-          <source key={src} src={src} type={getMimeType(src)} />
+          <source key={src} src={src} />
         ))}
       </audio>
 
+      {needsUnlock && !playing && (
+        <button
+          type="button"
+          className="music-unlock-hint"
+          onClick={unlock}
+          aria-label="Музыканы қосу"
+        >
+          <span className="music-unlock-hint__icon" aria-hidden="true">
+            ♪
+          </span>
+          Музыканы қосу үшін басыңыз
+        </button>
+      )}
+
       <button
-        onClick={toggleMusic}
-        className={`music-toggle ${playing ? "music-toggle--playing" : ""}`}
-        aria-label={playing ? "Остановить музыку" : "Включить музыку"}
         type="button"
+        className={`music-toggle ${playing ? 'music-toggle--playing' : ''} ${needsUnlock && !playing ? 'music-toggle--pulse' : ''}`}
+        onClick={toggle}
+        aria-label={playing ? 'Музыканы тоқтату' : 'Музыканы қосу'}
       >
-        {playing ? "♫" : "♪"}
+        <span className="music-toggle__icon" aria-hidden="true">
+          {playing ? '♫' : '♪'}
+        </span>
       </button>
     </>
   );

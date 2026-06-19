@@ -1,86 +1,12 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import invitation from '../config/invitation';
 import BackgroundMusic from './BackgroundMusic';
 import MotionText from './MotionText';
 import PhotoSlide from './PhotoSlide';
 import OrnamentDivider from './OrnamentDivider';
 import CountdownTimer from './CountdownTimer';
-import { easeSmooth, fadeUp, textDuration } from '../motion/motionConfig';
-
-function RsvpForm() {
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const name = formData.get('guestName')?.toString().trim();
-    const count = formData.get('guestCount');
-    const attendance = formData.get('attendance');
-    if (!name || !count || !attendance) return;
-    setSubmitted(true);
-  };
-
-  return (
-    <AnimatePresence mode="wait">
-      {!submitted ? (
-        <motion.form
-          key="form"
-          className="rsvp-form"
-          noValidate
-          onSubmit={handleSubmit}
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          exit={{ opacity: 0, y: -12, transition: { duration: 0.5, ease: easeSmooth } }}
-        >
-          <div className="form-group">
-            <label htmlFor="guestName">Аты-жөніңіз</label>
-            <input type="text" id="guestName" name="guestName" placeholder="Мысалы: Айгүл Сейтқазы" required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="guestCount">Қонақтар саны</label>
-            <select id="guestCount" name="guestCount" defaultValue="" required>
-              <option value="" disabled>Таңдаңыз</option>
-              <option value="1">1 адам</option>
-              <option value="2">2 адам</option>
-              <option value="3">3 адам</option>
-              <option value="4">4 адам</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Қатысасыз ба?</label>
-            <div className="radio-group">
-              <label className="radio-label">
-                <input type="radio" name="attendance" value="yes" required />
-                <span>Иә, келемін</span>
-              </label>
-              <label className="radio-label">
-                <input type="radio" name="attendance" value="no" />
-                <span>Өкінішке орай, келе алмаймын</span>
-              </label>
-            </div>
-          </div>
-          <div className="form-group">
-            <label htmlFor="guestMessage">Тілек (міндетті емес)</label>
-            <textarea id="guestMessage" name="guestMessage" rows={3} placeholder="Жылы тілектеріңізді жазыңыз..." />
-          </div>
-          <button type="submit" className="btn-submit">Жіберу</button>
-        </motion.form>
-      ) : (
-        <motion.p
-          key="success"
-          className="rsvp-success"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: textDuration, ease: easeSmooth }}
-        >
-          {invitation.rsvp.successMessage}
-        </motion.p>
-      )}
-    </AnimatePresence>
-  );
-}
+import RsvpForm from './RsvpForm';
+import { fadeUp } from '../motion/motionConfig';
 
 function Invitation() {
   const { bride, event, greeting, welcome, hosts, location, contacts, footer, photos } = invitation;
