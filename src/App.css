@@ -116,8 +116,8 @@ body {
 
 /* Белая зона по центру (hero, той иелері, дата) */
 .invite-slide--center .invite-slide__text {
-  top: 28%;
-  bottom: 22%;
+  top: 18%;
+  bottom: 32%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -254,8 +254,10 @@ body {
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
-  color: #4a3428;
-  text-shadow: 0 1px 4px rgba(255,255,255,.6);
+  color: #3a281d;
+  text-shadow:
+    0 0 8px rgba(255,255,255,0.9),
+    0 0 16px rgba(255,255,255,0.7);
   font-size: clamp(2.4rem, 11vw, 3.2rem);
   line-height: 1.1;
   letter-spacing: 0.01em;
@@ -735,6 +737,10 @@ a:hover {
 .hero-middle {
   text-align: center;
   position: relative;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(4px);
+  border-radius: 12px;
+  padding: 20px;
 }
 
 .hero-bride-name {
