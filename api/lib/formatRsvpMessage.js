@@ -10,7 +10,6 @@ function formatRsvpMessage({ name, guestCount, attendance, message, eventTitle =
     attendance === 'yes' ? '✅ Иә, келемін' : '😔 Өкінішке орай, келе алмаймын';
 
   const lines = [
-    `<b>🎉 Жаңа RSVP</b>`,
     `<b>${escapeHtml(eventTitle)}</b>`,
     '',
     `👤 <b>Аты-жөні:</b> ${escapeHtml(name)}`,
