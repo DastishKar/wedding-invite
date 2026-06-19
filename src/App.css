@@ -116,8 +116,8 @@ body {
 
 /* Белая зона по центру (hero, той иелері, дата) */
 .invite-slide--center .invite-slide__text {
-  top: 18%;
-  bottom: 32%;
+  top: 38%;
+  bottom: 22%;
   display: flex;
   align-items: center;
   justify-content: center;
