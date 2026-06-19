@@ -82,13 +82,13 @@ const invitation = {
     hosts: [
       {
         name: "Сағынбек",
-        phone: "+77001234567",
-        phoneDisplay: "+7 (700) 123-45-67",
+        phone: "+77771636299",
+        phoneDisplay: "+7 (777) 163-62-99",
       },
       {
         name: "Алия",
-        phone: "+77007654321",
-        phoneDisplay: "+7 (700) 765-43-21",
+        phone: "+77071540969",
+        phoneDisplay: "+7 (707) 154-09-69",
       },
     ],
   },
