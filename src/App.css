@@ -282,13 +282,32 @@ body {
 .wedding-kaz-text--caps,
 .details-text {
   font-family: var(--font-body);
-  font-weight: 300;
+  font-weight: 500;
   font-size: clamp(0.82rem, 3vw, 0.95rem);
   text-transform: uppercase;
   letter-spacing: 4px;
-  color: #5d4738;
+  color: #3a281d;
   line-height: 2;
   text-align: center;
+  text-shadow:
+    0 0 4px rgba(255,255,255,0.9),
+    0 0 8px rgba(255,255,255,0.7);
+}
+.wedding-date,
+.hero-date {
+  color: #3a281d;
+  font-weight: 500;
+  text-shadow:
+    0 0 4px rgba(255,255,255,0.9),
+    0 0 8px rgba(255,255,255,0.7);
+}
+.hero-date,
+.hero-event-title {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(3px);
+  border-radius: 6px;
 }
 
 /* Число даты — акцент */
