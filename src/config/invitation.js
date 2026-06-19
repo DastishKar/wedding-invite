@@ -21,13 +21,13 @@ const invitation = {
   photos: Array.from({ length: 6 }, (_, i) => `/photos/${i + 1}.jpg`),
 
   bride: {
-    name: "Диляра",
+    // name: "Диляра",
     nameGenitive: "Диляраның",
   },
 
   event: {
-    title: "қыз ұзату",
-    dateDisplay: "25.07.2026",
+    // title: "қыз ұзату",
+    // dateDisplay: "25.07.2026",
     dateTime: "2026-07-25T17:00:00+05:00",
     month: "ШІЛДЕ",
     day: "25",
